@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Siguri_Projekti2;
 
 namespace DataSecurity_pr2
 {
@@ -15,12 +16,27 @@ namespace DataSecurity_pr2
         public Form1()
         {
             InitializeComponent();
+           
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            int x = 4;
+           
             
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Form2 form = new Form2();
+            form.ShowDialog();
         }
     }
 }
