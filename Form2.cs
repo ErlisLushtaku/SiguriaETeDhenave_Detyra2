@@ -28,6 +28,7 @@ namespace Siguri_Projekti2
             this.Hide();
             Form1 form = new Form1();
             form.ShowDialog();
+            this.Close();
             
         }
     }

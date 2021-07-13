@@ -28,7 +28,10 @@ namespace DataSecurity_pr2
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            
+            this.Hide();
+            Form3 form = new Form3();
+            form.ShowDialog();
+            this.Close();
 
         }
 
@@ -37,6 +40,7 @@ namespace DataSecurity_pr2
             this.Hide();
             Form2 form = new Form2();
             form.ShowDialog();
+            this.Close();
         }
     }
 }
