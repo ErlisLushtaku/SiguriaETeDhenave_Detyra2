@@ -1,0 +1,10 @@
+<bills>
+  <user>
+    <name>Enes</name>
+    <surname>Hasani</surname>
+    <email>enes*hasani@student.uni-pr.edu</email>
+    <id>2</id>
+    <password>12345678</password>
+    <salt>12345678</salt>
+  </user>
+</bills>
