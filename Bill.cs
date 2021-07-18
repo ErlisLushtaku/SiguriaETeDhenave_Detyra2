@@ -12,18 +12,20 @@ namespace DataSecurity_pr2
         private int year;
         private string month;
         private double value;
+        private int userId;
 
-        public Bill(string billType, int year, string month, double value)
+        public Bill(string type, int year, string month, double value, int userId)
         {
-            this.type = billType;
+            this.type = type;
             this.year = year;
             this.month = month;
             this.value = value;
+            this.userId = userId;
         }
 
-        public void setType(string billType)
+        public void setType(string type)
         {
-            this.type = billType;
+            this.type = type;
         }
 
         public string getType()
@@ -59,6 +61,16 @@ namespace DataSecurity_pr2
         public double getValue()
         {
             return value;
+        }
+
+        public void setUserId(int userId)
+        {
+            this.userId = userId;
+        }
+
+        public double getUserId()
+        {
+            return userId;
         }
     }
 }

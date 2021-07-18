@@ -81,7 +81,6 @@ namespace DataSecurity_pr2
         }
         public static int countUsers()
         {
-            //var result = objXml.XPathEvaluate("//submenuid");
             var nodeCount = 0;
             var reader = XmlReader.Create("../../Database/users.fxml");
             
