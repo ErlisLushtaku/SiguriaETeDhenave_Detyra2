@@ -16,8 +16,7 @@ namespace DataSecurity_pr2
         public Form1()
         {
             InitializeComponent();
-           
-            
+            //ServerSide.serverConn();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -42,5 +41,6 @@ namespace DataSecurity_pr2
             form.ShowDialog();
             this.Close();
         }
+ 
     }
 }
