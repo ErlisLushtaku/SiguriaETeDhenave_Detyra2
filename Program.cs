@@ -27,23 +27,36 @@ namespace DataSecurity_pr2
             //Bill bill = new Bill("E parregullt", 2019, "January", 800,2);
             //BillRepository.addBill(bill);
             //List<Bill> userBills = BillRepository.listUserBills(user.getId());
-            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
-            store.Open(OpenFlags.OpenExistingOnly);
-            X509Certificate2 certifikata = new X509Certificate2("../../DS.pfx","123456");
-            IJwtAlgorithm alg = new RS256Algorithm(certifikata);
-            IJsonSerializer serializer = new JsonNetSerializer();
-            IBase64UrlEncoder base64 = new JwtBase64UrlEncoder();
-            //IJwtValidator jwt = new JwtValidator(serializer,new UtcDateTimeProvider());
-            IJwtEncoder ije = new JwtEncoder(alg,serializer,base64);
-            var payload = new Dictionary<string, object>
-            {
-                {"Userid",1 }
-            };
+            // X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            //store.Open(OpenFlags.OpenExistingOnly);
 
-            var token = ije.Encode(payload, secret);
-            string awfsafaw = token;
-            Console.WriteLine(UserRepository.countUsers());
 
+
+            //X509Certificate2 certifikata = new X509Certificate2("../../DS.pfx","123456");
+            //IJwtAlgorithm alg = new RS256Algorithm(certifikata);
+            //IJsonSerializer serializer = new JsonNetSerializer();
+            //IBase64UrlEncoder base64 = new JwtBase64UrlEncoder();
+            ////IJwtValidator jwt = new JwtValidator(serializer,new UtcDateTimeProvider());
+            //IJwtEncoder ije = new JwtEncoder(alg,serializer,base64);
+            //var payload = new Dictionary<string, object>
+            //{
+            //    {"Userid",1 }
+            //};
+
+            //var token = ije.Encode(payload, secret);
+            //string awfsafaw = token;
+            //Console.WriteLine(awfsafaw);
+
+            //IJwtAlgorithm algorithm = new JWT.Algorithms.RS256Algorithm(certifikata);
+            //IJsonSerializer serializeri = new JsonNetSerializer();
+            //IBase64UrlEncoder base64i = new JwtBase64UrlEncoder();
+            //IJwtValidator validator = new JwtValidator(serializeri,new UtcDateTimeProvider());
+            //IJwtDecoder ide = new JwtDecoder(serializeri, validator,base64i,algorithm);
+            //var jsoni = ide.Decode(token,secret,true);
+            //Console.WriteLine(jsoni);
+
+            //ServerSide server = new ServerSide();
+            //server.listen();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
