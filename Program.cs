@@ -1,6 +1,7 @@
 ﻿using JWT;
 using JWT.Algorithms;
 using JWT.Serializers;
+using Siguri_Projekti2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,8 @@ namespace DataSecurity_pr2
             //var jsoni = ide.Decode(token,secret,true);
             //Console.WriteLine(jsoni);
 
-            //ServerSide server = new ServerSide();
+           // ServerSide server = new ServerSide();
+
             //server.listen();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
