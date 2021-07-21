@@ -8,13 +8,14 @@ using System.Security.Cryptography.X509Certificates;
 
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using DataSecurity_pr2.Repositories;
+using DataSecurity_pr2.Models;
 namespace DataSecurity_pr2
 {
     static class Program
     {
 
-        private const String secret = "enesh";
+        private const string secret = "enesh";
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -44,9 +45,9 @@ namespace DataSecurity_pr2
             string awfsafaw = token;
             Console.WriteLine(UserRepository.countUsers());
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new Form1());
 
         }
     }

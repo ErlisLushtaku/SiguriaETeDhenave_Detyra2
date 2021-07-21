@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using DataSecurity_pr2.Models;
 
-namespace DataSecurity_pr2
+namespace DataSecurity_pr2.Repositories
 {
     class BillRepository
     {

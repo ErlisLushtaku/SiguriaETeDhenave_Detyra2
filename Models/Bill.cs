@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataSecurity_pr2
+namespace DataSecurity_pr2.Models
 {
     class Bill
     {
