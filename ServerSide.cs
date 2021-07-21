@@ -12,12 +12,15 @@ using System.Net.Sockets;
 using System.Net;
 using DataSecurity_pr2;
 using System.Threading;
+using DataSecurity_pr2.Repositories;
+using DataSecurity_pr2.Models;
 
 namespace Siguri_Projekti2
 {
     class ServerSide
     {
-       public static X509Certificate2 certifikata = new X509Certificate2("../../DS.pfx", "123456");
+       public static X509Certificate2 certifikata = new X509Certificate2("../../Siguri_Projekti2.cer", "123456");
+        
         private const String secret = "enesh";
         private DESCryptoServiceProvider des;
         private RSACryptoServiceProvider rsa;
@@ -79,7 +82,7 @@ namespace Siguri_Projekti2
                 //komanda per login=emaili,pw
                 //per register=emri,mbi,imella,id,pw
                 //per fatura=id,viti,muji,...,...
-
+//login-command
                 switch (logOrRegOrBill)
                 {
                     case "login":
@@ -173,7 +176,8 @@ namespace Siguri_Projekti2
                 IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 11111);
                 server = new Socket(ipAddr.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
                 server.Bind(localEndPoint);
-                rsa = (RSACryptoServiceProvider)certifikata.PrivateKey;               
+                // rsa = (RSACryptoServiceProvider)certifikata.PrivateKey;
+                
             }
             catch (Exception e)
             {

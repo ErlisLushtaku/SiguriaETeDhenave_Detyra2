@@ -27,4 +27,11 @@
     <value>800</value>
     <user>2</user>
   </bill>
+  <bill>
+    <type>E parregullt</type>
+    <year>2019</year>
+    <month>January</month>
+    <value>800</value>
+    <user>2</user>
+  </bill>
 </bills>
