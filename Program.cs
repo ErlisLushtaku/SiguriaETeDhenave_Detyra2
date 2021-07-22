@@ -23,9 +23,29 @@ namespace DataSecurity_pr2
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(String[] args)
         {
-
+            if(args.Length < 1)
+            {
+                return;
+            }
+            else if(args[0]=="c")
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Form1());
+            }
+            else if(args[0]=="s")
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run();
+                ServerSide server = new ServerSide();
+            }
+            else
+            {
+                return;
+            }
             //User user = new User("Enes", "Hasani", "enes.hasani@student.uni-pr.edu", 2, "12345678", "12345678");
             //UserRepository.createUser(user);
             //Bill bill = new Bill("E parregullt", 2019, "January", 800, 2);
@@ -56,8 +76,8 @@ namespace DataSecurity_pr2
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-            ServerSide.JWTSignatureValidator(ServerSide.JWTSignature("enes.hasani@student.uni-pr.edu"));
-            ServerSide.getPrivateKey();
+            //ServerSide.JWTSignatureValidator(ServerSide.JWTSignature("enes.hasani@student.uni-pr.edu"));
+            //ServerSide.getPrivateKey();
         }
     }
 }
