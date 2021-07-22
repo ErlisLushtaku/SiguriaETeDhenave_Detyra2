@@ -66,6 +66,7 @@ namespace Siguri_Projekti2
             byte[] bytePlainMsg = Encoding.UTF8.GetBytes(request);
             MemoryStream ms = new MemoryStream();
             CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write);
+            cs.FlushFinalBlock();
             cs.Write(bytePlainMsg, 0, bytePlainMsg.Length);
             cs.Close();
             byte[] byteCipherMsg = ms.ToArray();

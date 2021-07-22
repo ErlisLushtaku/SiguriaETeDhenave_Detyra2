@@ -17,7 +17,6 @@ using DataSecurity_pr2.Models;
 using System.Text.RegularExpressions;
 using JWT.Builder;
 using System;
-using System.Text.Json;
 namespace Siguri_Projekti2
 {
     class ServerSide
@@ -50,29 +49,31 @@ namespace Siguri_Projekti2
             byte[] fullMsgData = Convert.FromBase64String(clientMessage);
  
             byte[] IV = new byte[8];
-            byte[] enDesKey = new byte[128];
+            byte[] enDesKey = new byte[256];
             byte[] enMessage = new byte[fullMsgData.Length - IV.Length - enDesKey.Length];
             Array.Copy(fullMsgData, IV, 8);
-            Array.Copy(fullMsgData, IV.Length, enDesKey, 0, 128);
+            Array.Copy(fullMsgData, IV.Length, enDesKey, 0, 256);
             Array.Copy(fullMsgData, IV.Length + enDesKey.Length, enMessage, 0, fullMsgData.Length - IV.Length - enDesKey.Length);
             DES des = DES.Create();
             des.IV = IV;
             des.Mode = CipherMode.CBC;
             des.Padding = PaddingMode.Zeros;
-            desKey = rsa.Decrypt(enDesKey, false);
+                       
+            desKey = rsa.Decrypt(enDesKey, false);            
             des.Key = desKey;
             
             MemoryStream memoryStream = new MemoryStream(enMessage);
             byte[] decryptedMessage = new byte[memoryStream.Length];
             CryptoStream cryptoStream = new CryptoStream(memoryStream, des.CreateDecryptor(), CryptoStreamMode.Read);
             cryptoStream.Read(decryptedMessage, 0, decryptedMessage.Length);
+            cryptoStream.FlushFinalBlock();
             cryptoStream.Close();
-            string decryptedData = Convert.ToBase64String(decryptedMessage);
+            string decryptedData = Encoding.UTF8.GetString(decryptedMessage);
             return decryptedData;
             // login-...
         }
 
-        public void createResponseToUser(UdpClient user,string data)
+        public void createResponseToUser(UdpClient user,string data, IPEndPoint RemoteIpEndPoint)
         {           
             string plainData = Decrypt(data);
             string logOrRegOrBill = plainData.Split('-')[0];
@@ -89,11 +90,11 @@ namespace Siguri_Projekti2
                     if (UserRepository.findUser(emaili) == null)
                     {
                         string encryptedResponse = Encrypt("ERROR");
-                        user.Send(Encoding.UTF8.GetBytes(encryptedResponse), Encoding.UTF8.GetBytes(encryptedResponse).Length);
+                        user.Send(Encoding.UTF8.GetBytes(encryptedResponse), Encoding.UTF8.GetBytes(encryptedResponse).Length, RemoteIpEndPoint);
                     }
                     else
                     {
-                        user.Send(Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))), Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))).Length);
+                        user.Send(Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))), Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
                     }
                     break;
 
@@ -110,19 +111,20 @@ namespace Siguri_Projekti2
                         User useri = new User(name, surname, email, id, password, salt);
                         if (UserRepository.createUser(useri))
                         {
-                            user.Send(Encoding.UTF8.GetBytes(Encrypt("OK")), Encoding.UTF8.GetBytes(Encrypt("OK")).Length);
+                            user.Send(Encoding.UTF8.GetBytes(Encrypt("OK")), Encoding.UTF8.GetBytes(Encrypt("OK")).Length, RemoteIpEndPoint);
+                            
                         }
                         else
                         {
                             byte[] a = new byte[2];
-                            user.Send(Encoding.UTF8.GetBytes(Encrypt("ERROR")), Encoding.UTF8.GetBytes(Encrypt("ERROR")).Length);
+                            user.Send(Encoding.UTF8.GetBytes(Encrypt("ERROR")), Encoding.UTF8.GetBytes(Encrypt("ERROR")).Length, RemoteIpEndPoint);
                             
                         }
                     }
                     else
                     {
 
-                        user.Send(Encoding.UTF8.GetBytes(Encrypt("ERROR")), Encoding.UTF8.GetBytes(Encrypt("ERROR")).Length);
+                        user.Send(Encoding.UTF8.GetBytes(Encrypt("ERROR")), Encoding.UTF8.GetBytes(Encrypt("ERROR")).Length, RemoteIpEndPoint);
                     }
                     break;
 
@@ -134,7 +136,7 @@ namespace Siguri_Projekti2
                     int userId = Convert.ToInt32(command.Split('>')[4]);
                     Bill bill = new Bill(type, year, month, value, userId);
                     BillRepository.addBill(bill);
-                    user.Send(Encoding.UTF8.GetBytes(Encrypt("OK")), Encoding.UTF8.GetBytes(Encrypt("OK")).Length);
+                    user.Send(Encoding.UTF8.GetBytes(Encrypt("OK")), Encoding.UTF8.GetBytes(Encrypt("OK")).Length, RemoteIpEndPoint);
                     break;
                 default:
                     break;
@@ -178,7 +180,7 @@ namespace Siguri_Projekti2
                 IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
                 byte[] receiveBytes = udpClient.Receive(ref RemoteIpEndPoint);
                 string returnData = Convert.ToBase64String(receiveBytes);                
-                createResponseToUser(udpClient,returnData);           
+                createResponseToUser(udpClient,returnData, RemoteIpEndPoint);           
             }
         }
 
