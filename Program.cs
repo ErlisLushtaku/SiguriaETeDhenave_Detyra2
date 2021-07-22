@@ -23,7 +23,7 @@ namespace DataSecurity_pr2
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(String[] args)
+        static void Main(string[] args)
         {
             if(args.Length < 1)
             {
@@ -31,16 +31,18 @@ namespace DataSecurity_pr2
             }
             else if(args[0]=="c")
             {
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Form1());
             }
             else if(args[0]=="s")
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run();
+                //Application.EnableVisualStyles();
+                //Application.SetCompatibleTextRenderingDefault(false);
+                //Application.Run();
                 ServerSide server = new ServerSide();
+
             }
             else
             {
