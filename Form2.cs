@@ -49,7 +49,7 @@ namespace Siguri_Projekti2
                     MessageBox.Show("Register succsessful", "Alert");
 
                     this.Hide();
-                    Form3 form = new Form3();
+                    Form3 form = new Form3(ClientSide.getJwtPayload(response));
                     form.ShowDialog();
                     this.Close();
                 }
