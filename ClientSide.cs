@@ -21,7 +21,7 @@ namespace Siguri_Projekti2
 {
     public class ClientSide
     {
-        public static X509Certificate2 certifikata = new X509Certificate2("../../Siguri_Projekti2.cer", "123456");
+        public static X509Certificate2 certifikata = new X509Certificate2("../../SFC.pfx", "123456");
 
         private DESCryptoServiceProvider des;
         private RSACryptoServiceProvider rsa;

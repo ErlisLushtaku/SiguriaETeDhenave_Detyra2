@@ -56,8 +56,7 @@ namespace DataSecurity_pr2
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-            ServerSide.JWTSignatureValidator(ServerSide.JWTSignature("enes.hasani@student.uni-pr.edu"));
-            ServerSide.getPrivateKey();
+            ClientSide.getJwtPayload(ServerSide.createJwtToken("enes.hasani@student.uni-pr.edu"));
         }
     }
 }
