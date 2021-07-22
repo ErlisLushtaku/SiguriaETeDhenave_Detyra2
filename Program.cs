@@ -32,18 +32,17 @@ namespace DataSecurity_pr2
             //Bill bill = new Bill("E parregullt", 2019, "January", 800, 2);
             //BillRepository.addBill(bill);
             //List<Bill> userBills = BillRepository.listUserBills(user.getId());
-            //X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
-            //store.Open(OpenFlags.OpenExistingOnly);
-            //X509Certificate2Collection cert = X509Certificate2UI.SelectFromCollection(store.Certificates, "a", "b", X509SelectionFlag.SingleSelection);
-            //X509Certificate2 certi = cert[0];
-            //X509Certificate2 certifikata = new X509Certificate2("../../Siguri_Projekti2.cer", "123456");
-            //Console.WriteLine(certifikata.HasPrivateKey);
+            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.OpenExistingOnly);
+            X509Certificate2Collection cert = X509Certificate2UI.SelectFromCollection(store.Certificates, "a", "b", X509SelectionFlag.SingleSelection);
+            X509Certificate2 certi = cert[0];
+            X509Certificate2 certifikata = new X509Certificate2("../../Siguri_Projekti2.cer", "123456");
+            Console.WriteLine(certifikata.HasPrivateKey);
 
-            //RSACryptoServiceProvider rsa = (RSACryptoServiceProvider)certifikata.PublicKey.Key;
-          //  Console.WriteLine(Convert.ToBase64String((rsa.Encrypt(Encoding.UTF8.GetBytes("aa"), false))));
-
-           // RSACryptoServiceProvider rsai = (RSACryptoServiceProvider)certi.PublicKey.Key;
-            //Console.WriteLine(Convert.ToBase64String((rsai.Encrypt(Encoding.UTF8.GetBytes("aa"), false))));
+            RSACryptoServiceProvider rsa = (RSACryptoServiceProvider)certifikata.PublicKey.Key;
+            Console.WriteLine(Convert.ToBase64String((rsa.Encrypt(Encoding.UTF8.GetBytes("aa"), false))).Length);            
+            RSACryptoServiceProvider rsai = (RSACryptoServiceProvider)certi.PublicKey.Key;
+            Console.WriteLine(Convert.ToBase64String((rsai.Encrypt(Encoding.UTF8.GetBytes("aa"), false))).Length);
             //if (Convert.ToBase64String((rsai.Encrypt(Encoding.UTF8.GetBytes("aa"), false))) == Convert.ToBase64String((rsa.Encrypt(Encoding.UTF8.GetBytes("aa"), false))))
             //{
             //    Console.WriteLine("true");
@@ -52,7 +51,7 @@ namespace DataSecurity_pr2
             //    Console.WriteLine("f");
             //}
 
-            
+
             //X509Certificate2 certifikata = new X509Certificate2("C:\\Users\\Amigos\\Desktop\\semestri 4\\siguria e t dhenave\\Siguri_Projekti2\\Siguri_Projekti2\\SRV.pfx", "123456");
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
