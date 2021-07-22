@@ -91,7 +91,7 @@ namespace Siguri_Projekti2
                     if (UserRepository.findUser(emaili) == null)
                     {
                         string encryptedResponse = Encrypt("ERROR");
-                        user.Send(Encoding.UTF8.GetBytes(encryptedResponse), Encoding.UTF8.GetBytes(encryptedResponse).Length, RemoteIpEndPoint);
+                        user.Send(Convert.FromBase64String(encryptedResponse), Convert.FromBase64String(encryptedResponse).Length, RemoteIpEndPoint);
                     }
                     else
                     {
@@ -100,10 +100,10 @@ namespace Siguri_Projekti2
                         string hashedUserSaltedPw = computeHash(userSaltedPw);
                         if (hashedUserSaltedPw == computeHash(useri.getSalt() + pw))
                         {
-                            user.Send(Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))), Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
+                            user.Send(Convert.FromBase64String(Encrypt(createJwtToken(emaili))), Convert.FromBase64String(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
                         }
                         else {
-                            user.Send(Encoding.UTF8.GetBytes(Encrypt("ERROR")), Encoding.UTF8.GetBytes(Encrypt("ERROR")).Length, RemoteIpEndPoint);
+                            user.Send(Convert.FromBase64String(Encrypt("ERROR")), Convert.FromBase64String(Encrypt("ERROR")).Length, RemoteIpEndPoint);
                         }
                     }
                     break;
@@ -121,20 +121,20 @@ namespace Siguri_Projekti2
                         User useri = new User(name, surname, email, id, computeHash(salt+password), salt);
                         if (UserRepository.createUser(useri))
                         {
-                            user.Send(Encoding.UTF8.GetBytes(Encrypt("OK")), Encoding.UTF8.GetBytes(Encrypt("OK")).Length, RemoteIpEndPoint);
+                            user.Send(Convert.FromBase64String(Encrypt("OK")), Convert.FromBase64String(Encrypt("OK")).Length, RemoteIpEndPoint);
                             
                         }
                         else
                         {
                             byte[] a = new byte[2];
-                            user.Send(Encoding.UTF8.GetBytes(Encrypt("ERROR")), Encoding.UTF8.GetBytes(Encrypt("ERROR")).Length, RemoteIpEndPoint);
+                            user.Send(Convert.FromBase64String(Encrypt("ERROR")), Convert.FromBase64String(Encrypt("ERROR")).Length, RemoteIpEndPoint);
                             
                         }
                     }
                     else
                     {
 
-                        user.Send(Encoding.UTF8.GetBytes(Encrypt("ERROR")), Encoding.UTF8.GetBytes(Encrypt("ERROR")).Length, RemoteIpEndPoint);
+                        user.Send(Convert.FromBase64String(Encrypt("ERROR")), Convert.FromBase64String(Encrypt("ERROR")).Length, RemoteIpEndPoint);
                     }
                     break;
 
@@ -146,7 +146,7 @@ namespace Siguri_Projekti2
                     int userId = Convert.ToInt32(command.Split('>')[4]);
                     Bill bill = new Bill(type, year, month, value, userId);
                     BillRepository.addBill(bill);
-                    user.Send(Encoding.UTF8.GetBytes(Encrypt("OK")), Encoding.UTF8.GetBytes(Encrypt("OK")).Length, RemoteIpEndPoint);
+                    user.Send(Convert.FromBase64String(Encrypt("OK")), Convert.FromBase64String(Encrypt("OK")).Length, RemoteIpEndPoint);
                     break;
                 default:
                     break;
