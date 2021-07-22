@@ -22,7 +22,7 @@ namespace Siguri_Projekti2
 {
     class ServerSide
     {
-        public static X509Certificate2 certifikata;
+        public static X509Certificate2 certifikata = new X509Certificate2("../../SFC.pfx", "123456");
         private DESCryptoServiceProvider des;
         private readonly RSACryptoServiceProvider rsa;
         private byte[] desKey;
@@ -85,14 +85,15 @@ namespace Siguri_Projekti2
             {
                 case "login":
                     string emaili = command.Split('>')[0];
-                    if (UserRepository.findUser(emaili) == null)
+                    User usr = UserRepository.findUser(emaili);
+                    if (usr == null)
                     {
                         string encryptedResponse = Encrypt("ERROR");
                         user.Send(Convert.FromBase64String(encryptedResponse), Convert.FromBase64String(encryptedResponse).Length, RemoteIpEndPoint);
                     }
                     else
                     {
-                        user.Send(Convert.FromBase64String(createJwtToken(emaili)), Convert.FromBase64String(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
+                        user.Send(Convert.FromBase64String(Encrypt(createJwtToken(usr))), Convert.FromBase64String(Encrypt(createJwtToken(usr))).Length, RemoteIpEndPoint);
                     }
                     break;
 
@@ -141,24 +142,22 @@ namespace Siguri_Projekti2
 
         }
 
-        public static string createJwtToken(string email)
+        public static string createJwtToken(User useri)
         {
-            User useri = UserRepository.findUser(email);
             IJwtAlgorithm alg = new RS256Algorithm(certifikata);
             var token = JwtBuilder.Create()
                                    .WithAlgorithm(alg)
-                                   .AddClaim("UserId", useri.getId())
-                                   .AddClaim("Name", useri.getName())
-                                   .AddClaim("Surname", useri.getSurname())
-                                   .AddClaim("Email", useri.getEmail())
-                                   .AddClaim("Password", useri.getPassword())
-                                   .AddClaim("Salt", useri.getSalt())
+                                   .AddClaim("name", useri.getName())
+                                   .AddClaim("surname", useri.getSurname())
+                                   .AddClaim("email", useri.getEmail())
+                                   .AddClaim("id", useri.getId())
+                                   .AddClaim("password", useri.getPassword())
+                                   .AddClaim("salt", useri.getSalt())
                                    .Encode();
             return token;
         }
         public ServerSide()
         {
-            certifikata = new X509Certificate2("../../SFC.pfx", "123456");
             rsa = (RSACryptoServiceProvider)certifikata.PrivateKey;
             serverThread();
         }
