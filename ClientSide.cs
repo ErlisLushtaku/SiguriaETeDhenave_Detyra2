@@ -70,7 +70,7 @@ namespace Siguri_Projekti2
             cs.Write(bytePlainMsg, 0, bytePlainMsg.Length);
             cs.Close();
             byte[] byteCipherMsg = ms.ToArray();
-            byte[] byteCipherDesKey = rsa.Encrypt(DesKey, false);
+            byte[] byteCipherDesKey = rsa.Encrypt(DesKey, true);
             //byte[] fullMessage = initialVector.Concat(byteCipherDesKey).Concat(byteCipherMsg).ToArray();
             string sendData = Convert.ToBase64String(initialVector.Concat(byteCipherDesKey).Concat(byteCipherMsg).ToArray());
 

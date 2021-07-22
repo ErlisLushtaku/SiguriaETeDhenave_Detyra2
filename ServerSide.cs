@@ -44,9 +44,9 @@ namespace Siguri_Projekti2
             return Convert.ToBase64String(concatenatedResponse);
 
         }
-        public string Decrypt(string clientMessage)
+        public string Decrypt(byte[] fullMsgData)
         {
-            byte[] fullMsgData = Convert.FromBase64String(clientMessage);
+ 
  
             byte[] IV = new byte[8];
             byte[] enDesKey = new byte[256];
@@ -59,7 +59,7 @@ namespace Siguri_Projekti2
             des.Mode = CipherMode.CBC;
             des.Padding = PaddingMode.Zeros;
                        
-            desKey = rsa.Decrypt(enDesKey, false);            
+            desKey = rsa.Decrypt(enDesKey, true);            
             des.Key = desKey;
             
             MemoryStream memoryStream = new MemoryStream(enMessage);
@@ -73,9 +73,9 @@ namespace Siguri_Projekti2
             // login-...
         }
 
-        public void createResponseToUser(UdpClient user,string data, IPEndPoint RemoteIpEndPoint)
+        public void createResponseToUser(UdpClient user, byte[] fullMsgData, IPEndPoint RemoteIpEndPoint)
         {           
-            string plainData = Decrypt(data);
+            string plainData = Decrypt(fullMsgData);
             string logOrRegOrBill = plainData.Split('-')[0];
             string command = plainData.Split('-')[1];
 
@@ -90,7 +90,7 @@ namespace Siguri_Projekti2
                     if (UserRepository.findUser(emaili) == null)
                     {
                         string encryptedResponse = Encrypt("ERROR");
-                        user.Send(Encoding.UTF8.GetBytes(encryptedResponse), Encoding.UTF8.GetBytes(encryptedResponse).Length, RemoteIpEndPoint);
+                        user.Send(Convert.FromBase64String(encryptedResponse), Convert.FromBase64String(encryptedResponse).Length, RemoteIpEndPoint);
                     }
                     else
                     {
@@ -150,12 +150,12 @@ namespace Siguri_Projekti2
             IJwtAlgorithm alg = new RS256Algorithm(certifikata);
             var token = JwtBuilder.Create()
                                    .WithAlgorithm(alg)
-                                   .AddClaim("UserId", useri.getId())
-                                   .AddClaim("Name", useri.getName())
-                                   .AddClaim("Surname", useri.getSurname())
-                                   .AddClaim("Email", useri.getEmail())
-                                   .AddClaim("Password", useri.getPassword())
-                                   .AddClaim("Salt", useri.getSalt())
+                                   .AddClaim("name", useri.getName())
+                                   .AddClaim("surname", useri.getSurname())
+                                   .AddClaim("email", useri.getEmail())
+                                   .AddClaim("id", useri.getId())
+                                   .AddClaim("password", useri.getPassword())
+                                   .AddClaim("salt", useri.getSalt())
                                    .Encode();
             return token;
         }
@@ -178,9 +178,8 @@ namespace Siguri_Projekti2
             while (true)
             {
                 IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                byte[] receiveBytes = udpClient.Receive(ref RemoteIpEndPoint);
-                string returnData = Convert.ToBase64String(receiveBytes);                
-                createResponseToUser(udpClient,returnData, RemoteIpEndPoint);           
+                byte[] receiveBytes = udpClient.Receive(ref RemoteIpEndPoint); 
+                createResponseToUser(udpClient, receiveBytes, RemoteIpEndPoint);           
             }
         }
 

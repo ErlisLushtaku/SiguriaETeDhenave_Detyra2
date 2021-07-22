@@ -17,18 +17,18 @@ namespace Siguri_Projekti2
 {
     public partial class Form3 : Form
     {
-        private const String secret = "enesh";
-        public Form3()
+        string globlToken;
+        public Form3(string token)
         {
             InitializeComponent();
             
-    }
+        }
 
         private void Form3_Load(object sender, EventArgs e)
         {
 
         }
-
+    
         private void button3_Click(object sender, EventArgs e)
         {      
             //IJwtAlgorithm algorithm = new JWT.Algorithms.RS256Algorithm(ServerSide.certifikata);

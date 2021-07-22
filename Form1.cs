@@ -31,8 +31,8 @@ namespace DataSecurity_pr2
             if(textBox1.Text!="" && textBox2.Text!="")
             {
                 client.requestToServer("login-" + textBox1.Text + ">" + textBox2.Text);
-                String response = client.responseFromServer();
-
+                string response = client.responseFromServer();
+                response = response.Substring(0, response.Length - 3);
                 if(response == "ERROR")
                 {
                     MessageBox.Show("You should sign up first!", "Alert");
@@ -42,7 +42,7 @@ namespace DataSecurity_pr2
                     // Nenshkrimi, pass check
 
                     this.Hide();
-                    Form3 form = new Form3();
+                    Form3 form = new Form3(ClientSide.getJwtPayload(response));
                     form.ShowDialog();
                     this.Close();
                 }
