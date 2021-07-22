@@ -96,9 +96,8 @@ namespace Siguri_Projekti2
                     else
                     {
                         User useri = UserRepository.findUser(emaili);
-                        string userSaltedPw = useri.getSalt() + useri.getPassword();
-                        string hashedUserSaltedPw = computeHash(userSaltedPw);
-                        if (hashedUserSaltedPw == computeHash(useri.getSalt() + pw))
+                        
+                        if (useri.getPassword()==pw)
                         {
                             user.Send(Convert.FromBase64String(Encrypt(createJwtToken(emaili))), Convert.FromBase64String(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
                         }
@@ -107,7 +106,6 @@ namespace Siguri_Projekti2
                         }
                     }
                     break;
-
                 case "register":
                     string userEmail = command.Split('>')[2];
                     if (UserRepository.findUser(userEmail) == null)
@@ -118,7 +116,7 @@ namespace Siguri_Projekti2
                         int id = Convert.ToInt32(command.Split('>')[3]);
                         string password = command.Split('>')[4];
                         string salt = command.Split('>')[5];
-                        User useri = new User(name, surname, email, id, computeHash(salt+password), salt);
+                        User useri = new User(name, surname, email, id, password, salt);
                         if (UserRepository.createUser(useri))
                         {
                             user.Send(Convert.FromBase64String(Encrypt("OK")), Convert.FromBase64String(Encrypt("OK")).Length, RemoteIpEndPoint);
@@ -151,7 +149,6 @@ namespace Siguri_Projekti2
                 default:
                     break;
             }
-
         }
         
         private string computeHash(string saltedpassword) {
