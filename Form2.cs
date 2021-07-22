@@ -31,5 +31,29 @@ namespace Siguri_Projekti2
             this.Close();
             
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // validimet
+            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && textBox5.Text != "")
+            {
+                Form1.client.requestToServer("register-" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + textBox5.Text);
+                String response = Form1.client.responseFromServer();
+
+                if (response == "ERROR")
+                {
+                    MessageBox.Show("Error registering", "Error");
+                }
+                else
+                {
+                    MessageBox.Show("Register succsessful", "Alert");
+
+                    this.Hide();
+                    Form3 form = new Form3();
+                    form.ShowDialog();
+                    this.Close();
+                }
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace DataSecurity_pr2
 {
     public partial class Form1 : Form
     {
-        ClientSide client;
+        public static ClientSide client;
         public Form1()
         {
             InitializeComponent();
@@ -27,14 +27,25 @@ namespace DataSecurity_pr2
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            // validimet
             if(textBox1.Text!="" && textBox2.Text!="")
             {
                 client.requestToServer("login-" + textBox1.Text + ">" + textBox2.Text);
+                String response = client.responseFromServer();
 
-                this.Hide();
-                Form3 form = new Form3();
-                form.ShowDialog();
-                this.Close();
+                if(response == "ERROR")
+                {
+                    MessageBox.Show("You should sign up first!", "Alert");
+                }
+                else
+                {
+                    // Nenshkrimi, pass check
+
+                    this.Hide();
+                    Form3 form = new Form3();
+                    form.ShowDialog();
+                    this.Close();
+                }
             }
         }
 
