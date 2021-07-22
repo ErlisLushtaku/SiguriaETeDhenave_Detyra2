@@ -69,6 +69,7 @@ namespace DataSecurity_pr2.Repositories
         //    return false;
         //} 
         public static User findUser(string email) {
+            objXml.Load("../../Database/users.fxml");
             XmlNodeList userList = objXml.GetElementsByTagName("user");
             foreach (XmlNode user in userList)
             {
