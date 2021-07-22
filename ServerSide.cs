@@ -87,14 +87,24 @@ namespace Siguri_Projekti2
             {
                 case "login":
                     string emaili = command.Split('>')[0];
+                    string pw = command.Split('>')[1];
                     if (UserRepository.findUser(emaili) == null)
                     {
                         string encryptedResponse = Encrypt("ERROR");
-                        user.Send(Convert.FromBase64String(encryptedResponse), Convert.FromBase64String(encryptedResponse).Length, RemoteIpEndPoint);
+                        user.Send(Encoding.UTF8.GetBytes(encryptedResponse), Encoding.UTF8.GetBytes(encryptedResponse).Length, RemoteIpEndPoint);
                     }
                     else
                     {
-                        user.Send(Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))), Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
+                        User useri = UserRepository.findUser(emaili);
+                        string userSaltedPw = useri.getSalt() + useri.getPassword();
+                        string hashedUserSaltedPw = computeHash(userSaltedPw);
+                        if (hashedUserSaltedPw == computeHash(useri.getSalt() + pw))
+                        {
+                            user.Send(Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))), Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
+                        }
+                        else {
+                            user.Send(Encoding.UTF8.GetBytes(Encrypt("ERROR")), Encoding.UTF8.GetBytes(Encrypt("ERROR")).Length, RemoteIpEndPoint);
+                        }
                     }
                     break;
 
@@ -108,7 +118,7 @@ namespace Siguri_Projekti2
                         int id = Convert.ToInt32(command.Split('>')[3]);
                         string password = command.Split('>')[4];
                         string salt = command.Split('>')[5];
-                        User useri = new User(name, surname, email, id, password, salt);
+                        User useri = new User(name, surname, email, id, computeHash(salt+password), salt);
                         if (UserRepository.createUser(useri))
                         {
                             user.Send(Encoding.UTF8.GetBytes(Encrypt("OK")), Encoding.UTF8.GetBytes(Encrypt("OK")).Length, RemoteIpEndPoint);
@@ -142,6 +152,13 @@ namespace Siguri_Projekti2
                     break;
             }
 
+        }
+        
+        private string computeHash(string saltedpassword) {
+            byte[] byteSaltedPassword = Encoding.UTF8.GetBytes(saltedpassword);
+            SHA1CryptoServiceProvider obj = new SHA1CryptoServiceProvider();
+            byte[] saltedHashPassword = obj.ComputeHash(byteSaltedPassword);
+            return Convert.ToBase64String(saltedHashPassword);
         }
 
         public static string createJwtToken(string email)
