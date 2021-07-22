@@ -42,6 +42,7 @@ namespace DataSecurity_pr2.Repositories
         }
         public static List<Bill> listUserBills(int userId){
             List<Bill> userBills = new List<Bill>();
+            objXml.Load("../../Database/bills.fxml");
             XmlNodeList billList = objXml.GetElementsByTagName("bill");
             foreach (XmlNode bill in billList)
             {
@@ -54,7 +55,7 @@ namespace DataSecurity_pr2.Repositories
         {
             if (!File.Exists("../../Database/bills.fxml"))
             {
-                XmlTextWriter xmlTextWriter = new XmlTextWriter("../../Database/users.fxml", Encoding.UTF8);
+                XmlTextWriter xmlTextWriter = new XmlTextWriter("../../Database/bills.fxml", Encoding.UTF8);
                 xmlTextWriter.WriteStartElement("bills");
                 xmlTextWriter.Close();
             }

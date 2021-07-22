@@ -14,14 +14,21 @@ using DataSecurity_pr2;
 using System.Threading;
 using DataSecurity_pr2.Repositories;
 using DataSecurity_pr2.Models;
+using System.Text.RegularExpressions;
+using JWT.Builder;
 
 namespace Siguri_Projekti2
 {
     class ServerSide
     {
-        public static X509Certificate2 certifikata = new X509Certificate2("../../Siguri_Projekti2.cer", "123456");
-
-        private const String secret = "enesh";
+       public static X509Certificate2 certifikata = new X509Certificate2("../../DS.pfx", "123456");
+        private static string secret = "enesh";
+        public static string getPrivateKey()
+        {
+            string privKeyFileToBeRead = File.ReadAllText("../../private-key.pem");
+            string privKey = Regex.Replace(privKeyFileToBeRead, "-----BEGIN ENCRYPTED PRIVATE KEY-----|-----END ENCRYPTED PRIVATE KEY-----|\\r|\\n", "");
+            return privKey;
+        }
         private DESCryptoServiceProvider des;
         private readonly RSACryptoServiceProvider rsa;
         private byte[] desKey;
@@ -141,31 +148,23 @@ namespace Siguri_Projekti2
 
         }
 
-        public static string JWTSignature(string email)
+        public static string createJwtToken(string email)
         {
             User useri = UserRepository.findUser(email);
-
             IJwtAlgorithm alg = new RS256Algorithm(certifikata);
-            IJsonSerializer serializer = new JsonNetSerializer();
-            IBase64UrlEncoder base64 = new JwtBase64UrlEncoder();
-            //IJwtValidator jwt = new JwtValidator(serializer,new UtcDateTimeProvider());
-            IJwtEncoder ije = new JwtEncoder(alg, serializer, base64);
-            var payload = new Dictionary<string, object>
-            {
-                {"Userid",useri.getId()},
-                {"Name",useri.getName()},
-                {"Surname",useri.getSurname()},
-                {"Email",useri.getEmail()},
-                {"Password",useri.getPassword()},
-                {"Salt",useri.getSalt()}
-            };
 
-            var token = ije.Encode(payload, secret);
-            string signedMessage = token;
-
-            return signedMessage;
+            var token = JwtBuilder.Create()
+                                   .WithAlgorithm(alg)      
+                                   .AddClaim("UserId", useri.getId())
+                                   .AddClaim("Name", useri.getName())
+                                   .AddClaim("Surname", useri.getSurname())
+                                   .AddClaim("Email", useri.getEmail())
+                                   .AddClaim("Password", useri.getPassword())
+                                   .AddClaim("Salt", useri.getSalt())
+                                   .Encode();
+            return token;
         }
-        public ServerSide()
+        public  ServerSide()
         {
             rsa = (RSACryptoServiceProvider)certifikata.PrivateKey;
             serverThread();

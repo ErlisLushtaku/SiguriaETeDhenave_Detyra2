@@ -15,6 +15,7 @@ using DataSecurity_pr2;
 using System.Threading;
 using DataSecurity_pr2.Repositories;
 using DataSecurity_pr2.Models;
+using JWT.Builder;
 
 namespace Siguri_Projekti2
 {
@@ -22,7 +23,6 @@ namespace Siguri_Projekti2
     {
         public static X509Certificate2 certifikata = new X509Certificate2("../../Siguri_Projekti2.cer", "123456");
 
-        private const String secret = "enesh";
         private DESCryptoServiceProvider des;
         private RSACryptoServiceProvider rsa;
         static byte[] DesKey;
@@ -124,6 +124,22 @@ namespace Siguri_Projekti2
             // login-...
         }
 
+        public static string getJwtPayload(string token)
+        {
+            IJwtAlgorithm alg = new RS256Algorithm(certifikata);
+            try
+            {
+                var payload = JwtBuilder.Create()
+                         .WithAlgorithm(alg)
+                         .MustVerifySignature()
+                         .Decode(token);
+                return payload;
+            }
+            catch (Exception ex)
+            {
+                return "invalidSignature";
+            }
+        }
 
         //public static string JWTSignature(string email)
         //{
