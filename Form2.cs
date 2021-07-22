@@ -37,7 +37,10 @@ namespace Siguri_Projekti2
             // validimet
             if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && textBox5.Text != "")
             {
-                Form1.client.requestToServer("register-" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + textBox5.Text);
+                string salt = new Random().Next(100000, 1000000).ToString();
+                string password = ClientSide.computeHash(textBox5.Text + salt);
+
+                Form1.client.requestToServer("register-" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + password + ">" + salt);
                 String response = Form1.client.responseFromServer();
 
                 if (response == "ERROR")
