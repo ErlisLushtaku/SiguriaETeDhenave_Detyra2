@@ -19,7 +19,7 @@ using JWT.Builder;
 
 namespace Siguri_Projekti2
 {
-    class ClientSide
+    public class ClientSide
     {
         public static X509Certificate2 certifikata = new X509Certificate2("../../Siguri_Projekti2.cer", "123456");
 
@@ -29,9 +29,6 @@ namespace Siguri_Projekti2
         static byte[] initialVector;
 
         public UdpClient udpClient;
-
-        private Socket server;
-
 
         public ClientSide()
         {
@@ -97,13 +94,14 @@ namespace Siguri_Projekti2
         //    return Convert.ToBase64String(concatenatedResponse);
 
         //}
-        public string responseFromServer(string response)
-        {
-            string[] explodedMessages = response.Split(',');
-            byte[] byteResponse = Convert.FromBase64String(response);
+        public string responseFromServer() {
+
+            IPEndPoint remoteIPEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            byte[] byteResponse = udpClient.Receive(ref remoteIPEndPoint);
+
             byte[] IV = new byte[8];
             Array.Copy(byteResponse, IV, 8);
-            byte[] enMessage = new byte[byteResponse.Length-8];
+            byte[] enMessage = new byte[byteResponse.Length - 8];
             Array.Copy(byteResponse, 8, enMessage, 0, enMessage.Length);
 
             DES des = DES.Create();
@@ -118,6 +116,7 @@ namespace Siguri_Projekti2
             CryptoStream cryptoStream = new CryptoStream(memoryStream, des.CreateDecryptor(), CryptoStreamMode.Read);
             cryptoStream.Read(decryptedMessage, 0, decryptedMessage.Length);
             cryptoStream.Close();
+
             string decryptedData = Encoding.UTF8.GetString(decryptedMessage);
 
             return decryptedData;

@@ -36,7 +36,7 @@ namespace Siguri_Projekti2
         {
             byte[] byteResponse = Encoding.UTF8.GetBytes(response);
             des = new DESCryptoServiceProvider();
-              des.Key = desKey;
+            des.Key = desKey;
            // des.GenerateKey();
             des.Mode = CipherMode.CBC;
             des.Padding = PaddingMode.Zeros;
