@@ -16,7 +16,8 @@ using DataSecurity_pr2.Repositories;
 using DataSecurity_pr2.Models;
 using System.Text.RegularExpressions;
 using JWT.Builder;
-using System;
+//using System;
+//using System.Text.Json;
 namespace Siguri_Projekti2
 {
     class ServerSide
@@ -30,7 +31,7 @@ namespace Siguri_Projekti2
             byte[] byteResponse = Encoding.UTF8.GetBytes(response);
             des = new DESCryptoServiceProvider();
             des.Key = desKey;
-           // des.GenerateKey();
+            // des.GenerateKey();
             des.Mode = CipherMode.CBC;
             des.Padding = PaddingMode.Zeros;
             des.GenerateIV(); //gjenerimi i IV`
@@ -46,27 +47,24 @@ namespace Siguri_Projekti2
         }
         public string Decrypt(byte[] fullMsgData)
         {
- 
- 
+
             byte[] IV = new byte[8];
             byte[] enDesKey = new byte[256];
             byte[] enMessage = new byte[fullMsgData.Length - IV.Length - enDesKey.Length];
             Array.Copy(fullMsgData, IV, 8);
             Array.Copy(fullMsgData, IV.Length, enDesKey, 0, 256);
             Array.Copy(fullMsgData, IV.Length + enDesKey.Length, enMessage, 0, fullMsgData.Length - IV.Length - enDesKey.Length);
+            desKey = rsa.Decrypt(enDesKey, true);
             DES des = DES.Create();
             des.IV = IV;
+            des.Key = desKey;
             des.Mode = CipherMode.CBC;
             des.Padding = PaddingMode.Zeros;
-                       
-            desKey = rsa.Decrypt(enDesKey, true);            
-            des.Key = desKey;
-            
+
             MemoryStream memoryStream = new MemoryStream(enMessage);
             byte[] decryptedMessage = new byte[memoryStream.Length];
             CryptoStream cryptoStream = new CryptoStream(memoryStream, des.CreateDecryptor(), CryptoStreamMode.Read);
             cryptoStream.Read(decryptedMessage, 0, decryptedMessage.Length);
-            cryptoStream.FlushFinalBlock();
             cryptoStream.Close();
             string decryptedData = Encoding.UTF8.GetString(decryptedMessage);
             return decryptedData;
@@ -74,10 +72,10 @@ namespace Siguri_Projekti2
         }
 
         public void createResponseToUser(UdpClient user, byte[] fullMsgData, IPEndPoint RemoteIpEndPoint)
-        {           
+        {
             string plainData = Decrypt(fullMsgData);
-            string logOrRegOrBill = plainData.Split('-')[0];
-            string command = plainData.Split('-')[1];
+            string logOrRegOrBill = plainData.Split('*')[0];
+            string command = plainData.Split('*')[1];
 
             //komanda per login=emaili,pw
             //per register=emri,mbi,imella,id,pw
@@ -87,7 +85,6 @@ namespace Siguri_Projekti2
             {
                 case "login":
                     string emaili = command.Split('>')[0];
-                    string pw = command.Split('>')[1];
                     if (UserRepository.findUser(emaili) == null)
                     {
                         string encryptedResponse = Encrypt("ERROR");
@@ -95,17 +92,10 @@ namespace Siguri_Projekti2
                     }
                     else
                     {
-                        User useri = UserRepository.findUser(emaili);
-                        
-                        if (useri.getPassword()==pw)
-                        {
-                            user.Send(Convert.FromBase64String(Encrypt(createJwtToken(emaili))), Convert.FromBase64String(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
-                        }
-                        else {
-                            user.Send(Convert.FromBase64String(Encrypt("ERROR")), Convert.FromBase64String(Encrypt("ERROR")).Length, RemoteIpEndPoint);
-                        }
+                        user.Send(Convert.FromBase64String(createJwtToken(emaili)), Convert.FromBase64String(Encrypt(createJwtToken(emaili))).Length, RemoteIpEndPoint);
                     }
                     break;
+
                 case "register":
                     string userEmail = command.Split('>')[2];
                     if (UserRepository.findUser(userEmail) == null)
@@ -120,13 +110,12 @@ namespace Siguri_Projekti2
                         if (UserRepository.createUser(useri))
                         {
                             user.Send(Convert.FromBase64String(Encrypt("OK")), Convert.FromBase64String(Encrypt("OK")).Length, RemoteIpEndPoint);
-                            
                         }
                         else
                         {
                             byte[] a = new byte[2];
                             user.Send(Convert.FromBase64String(Encrypt("ERROR")), Convert.FromBase64String(Encrypt("ERROR")).Length, RemoteIpEndPoint);
-                            
+
                         }
                     }
                     else
@@ -149,13 +138,7 @@ namespace Siguri_Projekti2
                 default:
                     break;
             }
-        }
-        
-        private string computeHash(string saltedpassword) {
-            byte[] byteSaltedPassword = Encoding.UTF8.GetBytes(saltedpassword);
-            SHA1CryptoServiceProvider obj = new SHA1CryptoServiceProvider();
-            byte[] saltedHashPassword = obj.ComputeHash(byteSaltedPassword);
-            return Convert.ToBase64String(saltedHashPassword);
+
         }
 
         public static string createJwtToken(string email)
@@ -164,17 +147,16 @@ namespace Siguri_Projekti2
             IJwtAlgorithm alg = new RS256Algorithm(certifikata);
             var token = JwtBuilder.Create()
                                    .WithAlgorithm(alg)
-                                   .AddClaim("name", useri.getName())
-                                   .AddClaim("surname", useri.getSurname())
-                                   .AddClaim("email", useri.getEmail())
-                                   .AddClaim("id", useri.getId())
-                                   .AddClaim("password", useri.getPassword())
-                                   .AddClaim("salt", useri.getSalt())
+                                   .AddClaim("UserId", useri.getId())
+                                   .AddClaim("Name", useri.getName())
+                                   .AddClaim("Surname", useri.getSurname())
+                                   .AddClaim("Email", useri.getEmail())
+                                   .AddClaim("Password", useri.getPassword())
+                                   .AddClaim("Salt", useri.getSalt())
                                    .Encode();
             return token;
         }
-        //awgasgweasfaw
-        public  ServerSide()
+        public ServerSide()
         {
             certifikata = new X509Certificate2("../../SFC.pfx", "123456");
             rsa = (RSACryptoServiceProvider)certifikata.PrivateKey;
@@ -192,8 +174,8 @@ namespace Siguri_Projekti2
             while (true)
             {
                 IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                byte[] receiveBytes = udpClient.Receive(ref RemoteIpEndPoint); 
-                createResponseToUser(udpClient, receiveBytes, RemoteIpEndPoint);           
+                byte[] receiveBytes = udpClient.Receive(ref RemoteIpEndPoint);
+                createResponseToUser(udpClient, receiveBytes, RemoteIpEndPoint);
             }
         }
 

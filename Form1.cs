@@ -11,6 +11,7 @@ using Siguri_Projekti2;
 using DataSecurity_pr2.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace DataSecurity_pr2
 {
@@ -33,10 +34,10 @@ namespace DataSecurity_pr2
             // validimet
             if(textBox1.Text!="" && textBox2.Text!="")
             {
-                client.requestToServer("login-" + textBox1.Text + ">" + textBox2.Text);
+                client.requestToServer("login*" + textBox1.Text + ">" + textBox2.Text);
                 string response = client.responseFromServer();
-                response = response.Substring(0, response.Length - 3);
-
+                
+                response = Regex.Replace(response, @"[\0]+","");
                 if(response == "ERROR")
                 {
                     MessageBox.Show("You should sign up first!", "Alert");
@@ -51,8 +52,13 @@ namespace DataSecurity_pr2
                     }
                     else
                     {
-                        User user = JsonSerializer.Deserialize<User>(payload);
-                        if (ClientSide.computeHash(textBox2.Text + user.getSalt()) == user.getPassword()) { 
+                        string keyValPwd = payload.Split(',')[4];
+                        string password = keyValPwd.Split(':')[1];
+                        password = password.Substring(1, password.Length - 2);
+                        string keyValSlt = payload.Split(',')[5];
+                        string salt = keyValSlt.Split(':')[1];
+                        salt = salt.Substring(1, salt.Length - 3);
+                        if (ClientSide.computeHash(textBox2.Text + salt) == password) { 
                             this.Hide();
                             Form3 form = new Form3(payload);
                             form.ShowDialog();
