@@ -144,6 +144,13 @@ namespace Siguri_Projekti2
                 return "invalidSignature";
             }
         }
+        public static string computeHash(string saltedpassword)
+        {
+            byte[] byteSaltedPassword = Encoding.UTF8.GetBytes(saltedpassword);
+            SHA1CryptoServiceProvider obj = new SHA1CryptoServiceProvider();
+            byte[] saltedHashPassword = obj.ComputeHash(byteSaltedPassword);
+            return Convert.ToBase64String(saltedHashPassword);
+        }
 
         //public static string JWTSignature(string email)
         //{

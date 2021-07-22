@@ -12,16 +12,19 @@ using JWT.Algorithms;
 using JWT.Serializers;
 using System.Security.Cryptography.X509Certificates;
 using DataSecurity_pr2;
+using DataSecurity_pr2.Models;
 
 namespace Siguri_Projekti2
 {
     public partial class Form3 : Form
     {
-        string globlToken;
-        public Form3(string token)
+        User user;
+        string payload;
+        public Form3(string payload)
         {
             InitializeComponent();
-            
+            // this.user = user;
+            this.payload = payload;
         }
 
         private void Form3_Load(object sender, EventArgs e)
@@ -30,13 +33,14 @@ namespace Siguri_Projekti2
         }
     
         private void button3_Click(object sender, EventArgs e)
-        {      
+        {
             //IJwtAlgorithm algorithm = new JWT.Algorithms.RS256Algorithm(ServerSide.certifikata);
             //IJsonSerializer serializeri = new JsonNetSerializer();
             //IBase64UrlEncoder base64i = new JwtBase64UrlEncoder();
             //IJwtValidator validator = new JwtValidator(serializeri, new UtcDateTimeProvider());
             //IJwtDecoder ide = new JwtDecoder(serializeri, validator, base64i, algorithm);
             //var jsoni = ide.Decode(ServerSide.JWTSignature(1,"a","a","a"), secret, true);
+            textBox5.Text = payload;
         }
 
         private void button1_Click(object sender, EventArgs e)
