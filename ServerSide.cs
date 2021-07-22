@@ -16,19 +16,13 @@ using DataSecurity_pr2.Repositories;
 using DataSecurity_pr2.Models;
 using System.Text.RegularExpressions;
 using JWT.Builder;
-
+using System;
+using System.Text.Json;
 namespace Siguri_Projekti2
 {
     class ServerSide
     {
        public static X509Certificate2 certifikata = new X509Certificate2("../../SFC.pfx", "123456");
-        private static string secret = "enesh";
-        public static string getPrivateKey()
-        {
-            string privKeyFileToBeRead = File.ReadAllText("../../private-key.pem");
-            string privKey = Regex.Replace(privKeyFileToBeRead, "-----BEGIN ENCRYPTED PRIVATE KEY-----|-----END ENCRYPTED PRIVATE KEY-----|\\r|\\n", "");
-            return privKey;
-        }
         private DESCryptoServiceProvider des;
         private readonly RSACryptoServiceProvider rsa;
         private byte[] desKey;
@@ -152,9 +146,8 @@ namespace Siguri_Projekti2
         {
             User useri = UserRepository.findUser(email);
             IJwtAlgorithm alg = new RS256Algorithm(certifikata);
-
             var token = JwtBuilder.Create()
-                                   .WithAlgorithm(alg)      
+                                   .WithAlgorithm(alg)
                                    .AddClaim("UserId", useri.getId())
                                    .AddClaim("Name", useri.getName())
                                    .AddClaim("Surname", useri.getSurname())
