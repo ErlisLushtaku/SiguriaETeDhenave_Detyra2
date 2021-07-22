@@ -21,7 +21,7 @@ namespace Siguri_Projekti2
 {
     class ServerSide
     {
-       public static X509Certificate2 certifikata = new X509Certificate2("../../DS.pfx", "123456");
+       public static X509Certificate2 certifikata = new X509Certificate2("../../SFC.pfx", "123456");
         private static string secret = "enesh";
         public static string getPrivateKey()
         {
