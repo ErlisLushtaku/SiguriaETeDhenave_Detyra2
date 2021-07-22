@@ -32,7 +32,8 @@ namespace Siguri_Projekti2
 
         public ClientSide()
         {
-            try {
+            try
+            {
                 //IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
                 //IPAddress ipAddr = ipHost.AddressList[0];
                 //IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 11111);
@@ -46,12 +47,15 @@ namespace Siguri_Projekti2
                 des = new DESCryptoServiceProvider();
                 rsa = (RSACryptoServiceProvider)certifikata.PublicKey.Key;
 
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine(e.ToString());
             }
         }
-        public void requestToServer(String request) {
-            
+        public void requestToServer(string request)
+        {
+
             des.GenerateKey();
             DesKey = des.Key;
             des.GenerateIV();
@@ -64,17 +68,16 @@ namespace Siguri_Projekti2
             CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write);
             cs.Write(bytePlainMsg, 0, bytePlainMsg.Length);
             cs.Close();
-
             byte[] byteCipherMsg = ms.ToArray();
-            byte[] byteCipherDesKey = rsa.Encrypt(DesKey, true);
-
+            byte[] byteCipherDesKey = rsa.Encrypt(DesKey, false);
+            //byte[] fullMessage = initialVector.Concat(byteCipherDesKey).Concat(byteCipherMsg).ToArray();
             string sendData = Convert.ToBase64String(initialVector.Concat(byteCipherDesKey).Concat(byteCipherMsg).ToArray());
 
-            udpClient.Send(Encoding.ASCII.GetBytes(sendData), sendData.Length);
+            udpClient.Send(Convert.FromBase64String(sendData), Convert.FromBase64String(sendData).Length);
             //user.Shutdown(SocketShutdown.Both);
             //user.Close();
-        }    
-            
+        }
+
         //public string Encrypt(string response)
         //{
         //    byte[] byteResponse = Encoding.UTF8.GetBytes(response);
@@ -94,7 +97,8 @@ namespace Siguri_Projekti2
         //    return Convert.ToBase64String(concatenatedResponse);
 
         //}
-        public string responseFromServer() {
+        public string responseFromServer()
+        {
 
             IPEndPoint remoteIPEndPoint = new IPEndPoint(IPAddress.Any, 0);
             byte[] byteResponse = udpClient.Receive(ref remoteIPEndPoint);

@@ -22,7 +22,7 @@ namespace Siguri_Projekti2
 {
     class ServerSide
     {
-       public static X509Certificate2 certifikata = new X509Certificate2("../../SFC.pfx", "123456");
+        public static X509Certificate2 certifikata;
         private DESCryptoServiceProvider des;
         private readonly RSACryptoServiceProvider rsa;
         private byte[] desKey;
@@ -54,20 +54,20 @@ namespace Siguri_Projekti2
             byte[] enMessage = new byte[fullMsgData.Length - IV.Length - enDesKey.Length];
             Array.Copy(fullMsgData, IV, 8);
             Array.Copy(fullMsgData, IV.Length, enDesKey, 0, 128);
-            Array.Copy(fullMsgData, IV.Length + enDesKey.Length, enMessage, 0, fullMsgData.Length - IV.Length - enDesKey.Length);                       
-             desKey = rsa.Decrypt(enDesKey, false);
+            Array.Copy(fullMsgData, IV.Length + enDesKey.Length, enMessage, 0, fullMsgData.Length - IV.Length - enDesKey.Length);
             DES des = DES.Create();
             des.IV = IV;
-            des.Key = desKey;
             des.Mode = CipherMode.CBC;
             des.Padding = PaddingMode.Zeros;
-
+            desKey = rsa.Decrypt(enDesKey, false);
+            des.Key = desKey;
+            
             MemoryStream memoryStream = new MemoryStream(enMessage);
             byte[] decryptedMessage = new byte[memoryStream.Length];
             CryptoStream cryptoStream = new CryptoStream(memoryStream, des.CreateDecryptor(), CryptoStreamMode.Read);
-            cryptoStream.Read(enMessage, 0, enMessage.Length);
+            cryptoStream.Read(decryptedMessage, 0, decryptedMessage.Length);
             cryptoStream.Close();
-            string decryptedData = Encoding.UTF8.GetString(decryptedMessage);
+            string decryptedData = Convert.ToBase64String(decryptedMessage);
             return decryptedData;
             // login-...
         }
@@ -157,8 +157,10 @@ namespace Siguri_Projekti2
                                    .Encode();
             return token;
         }
+        //awgasgweasfaw
         public  ServerSide()
         {
+            certifikata = new X509Certificate2("../../SFC.pfx", "123456");
             rsa = (RSACryptoServiceProvider)certifikata.PrivateKey;
             serverThread();
         }
@@ -174,8 +176,8 @@ namespace Siguri_Projekti2
             while (true)
             {
                 IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                Byte[] receiveBytes = udpClient.Receive(ref RemoteIpEndPoint);
-                string returnData = Encoding.UTF8.GetString(receiveBytes);                
+                byte[] receiveBytes = udpClient.Receive(ref RemoteIpEndPoint);
+                string returnData = Convert.ToBase64String(receiveBytes);                
                 createResponseToUser(udpClient,returnData);           
             }
         }

@@ -25,29 +25,29 @@ namespace DataSecurity_pr2
         [STAThread]
         static void Main(string[] args)
         {
-            if(args.Length < 1)
-            {
-                return;
-            }
-            else if(args[0]=="c")
-            {
+            //if(args.Length < 1)
+            //{
+            //    return;
+            //}
+            //else if(args[0]=="c")
+            //{
 
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
-            }
-            else if(args[0]=="s")
-            {
-                //Application.EnableVisualStyles();
-                //Application.SetCompatibleTextRenderingDefault(false);
-                //Application.Run();
-                ServerSide server = new ServerSide();
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new Form1());
+            //}
+            //else if(args[0]=="s")
+            //{
+            //    //Application.EnableVisualStyles();
+            //    //Application.SetCompatibleTextRenderingDefault(false);
+            //    //Application.Run();
+            ServerSide server = new ServerSide();
 
-            }
-            else
-            {
-                return;
-            }
+            //}
+            //else
+            //{
+            //    return;
+            //}
             //User user = new User("Enes", "Hasani", "enes.hasani@student.uni-pr.edu", 2, "12345678", "12345678");
             //UserRepository.createUser(user);
             //Bill bill = new Bill("E parregullt", 2019, "January", 800, 2);
@@ -78,7 +78,7 @@ namespace DataSecurity_pr2
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
-            ClientSide.getJwtPayload(ServerSide.createJwtToken("enes.hasani@student.uni-pr.edu"));
+            //ClientSide.getJwtPayload(ServerSide.createJwtToken("enes.hasani@student.uni-pr.edu"));
         }
     }
 }
