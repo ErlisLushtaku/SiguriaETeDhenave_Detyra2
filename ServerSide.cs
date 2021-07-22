@@ -23,14 +23,14 @@ namespace Siguri_Projekti2
 
         private const String secret = "enesh";
         private DESCryptoServiceProvider des;
-        private RSACryptoServiceProvider rsa;      
-
+        private readonly RSACryptoServiceProvider rsa;
+        private byte[] desKey;
         public string Encrypt(string response)
         {
             byte[] byteResponse = Encoding.UTF8.GetBytes(response);
             des = new DESCryptoServiceProvider();
-            //  des.Key = DesKey;
-            des.GenerateKey();
+              des.Key = desKey;
+           // des.GenerateKey();
             des.Mode = CipherMode.CBC;
             des.Padding = PaddingMode.Zeros;
             des.GenerateIV(); //gjenerimi i IV`
@@ -54,7 +54,7 @@ namespace Siguri_Projekti2
             Array.Copy(fullMsgData, IV, 8);
             Array.Copy(fullMsgData, IV.Length, enDesKey, 0, 128);
             Array.Copy(fullMsgData, IV.Length + enDesKey.Length, enMessage, 0, fullMsgData.Length - IV.Length - enDesKey.Length);                       
-            byte[] desKey = rsa.Decrypt(enDesKey, false);
+             desKey = rsa.Decrypt(enDesKey, false);
             DES des = DES.Create();
             des.IV = IV;
             des.Key = desKey;
@@ -138,7 +138,6 @@ namespace Siguri_Projekti2
                 default:
                     break;
             }
-
 
         }
 
