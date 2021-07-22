@@ -99,7 +99,7 @@ namespace Siguri_Projekti2
                     }
                     else
                     {
-                        user.Send(Encoding.UTF8.GetBytes(Encrypt(JWTSignature(emaili))), Encoding.UTF8.GetBytes(Encrypt(JWTSignature(emaili))).Length);
+                        user.Send(Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))), Encoding.UTF8.GetBytes(Encrypt(createJwtToken(emaili))).Length);
                     }
                     break;
 
