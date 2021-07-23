@@ -7,4 +7,20 @@
     <password>12345678</password>
     <salt>12345678</salt>
   </user>
+  <user>
+    <name>a</name>
+    <surname>b</surname>
+    <email>as</email>
+    <id>12</id>
+    <password>P9ODchpxjBUG0xq5jk2BiY</password>
+    <salt>963710</salt>
+  </user>
+  <user>
+    <name>Donat</name>
+    <surname>Sinani</surname>
+    <email>donat@sin</email>
+    <id>123</id>
+    <password>MSMUFsolpKI3Fobkd6NQ9</password>
+    <salt>163184</salt>
+  </user>
 </users>

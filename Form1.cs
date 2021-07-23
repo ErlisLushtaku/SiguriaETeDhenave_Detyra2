@@ -60,7 +60,7 @@ namespace DataSecurity_pr2
                         string keyValSlt = payload.Split(',')[5];
                         string salt = keyValSlt.Split(':')[1];
                         salt = salt.Substring(1, salt.Length - 3);
-                        if (ClientSide.computeHash(textBox2.Text + salt) == password) { 
+                        if (ClientSide.computeHash(salt+textBox2.Text) == password) { 
                             this.Hide();
                             Form3 form = new Form3(payload);
                             form.ShowDialog();

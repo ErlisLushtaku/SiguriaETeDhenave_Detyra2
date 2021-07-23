@@ -34,12 +34,7 @@ namespace Siguri_Projekti2
         {
             try
             {
-                //IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
-                //IPAddress ipAddr = ipHost.AddressList[0];
-                //IPEndPoint localEndPoint = new IPEndPoint(ipAddr, 11111);
-                //server = new Socket(ipAddr.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-                //server.Bind(localEndPoint);
-                // rsa = (RSACryptoServiceProvider)certifikata.PrivateKey;
+             
 
                 udpClient = new UdpClient();
                 udpClient.Connect("localhost", 8080);
