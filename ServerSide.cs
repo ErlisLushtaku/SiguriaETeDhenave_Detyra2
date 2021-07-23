@@ -72,8 +72,9 @@ namespace Siguri_Projekti2
         public void createResponseToUser(UdpClient user, byte[] fullMsgData, IPEndPoint RemoteIpEndPoint)
         {
             string plainData = Decrypt(fullMsgData);
+            plainData = Regex.Replace(plainData, @"[\0]+", "");
             string logOrRegOrBill = plainData.Split('*')[0];
-            string command = plainData.Split('*')[1];
+            string command = plainData.Substring(logOrRegOrBill.Length + 1);
 
             //komanda per login=emaili,pw
             //per register=emri,mbi,imella,id,pw
@@ -83,7 +84,7 @@ namespace Siguri_Projekti2
             {
                 case "login":
                     string emaili = command.Split('>')[0];
-                    string passwordi = command.Split('>')[1];
+                    string passwordi = command.Substring(emaili.Length + 1);
                     User usr = UserRepository.findUser(emaili);
                     if (usr == null)
                     {
@@ -92,9 +93,12 @@ namespace Siguri_Projekti2
                     }
                     else
                     {
-                        if (usr.getPassword() != passwordi)
+                        string pwDb = usr.getPassword();
+                        string salt = usr.getSalt();
+                        string hASHpWD = computeHash(passwordi + salt);
+                        if (usr.getPassword() != computeHash(passwordi + usr.getSalt()))
                         {
-                            user.Send(Convert.FromBase64String(Encrypt("ERROR")), Convert.FromBase64String(Encrypt("ERROR")).Length, RemoteIpEndPoint);
+                            user.Send(Convert.FromBase64String(Encrypt("invalidCredentials")), Convert.FromBase64String(Encrypt("invalidCredentials")).Length, RemoteIpEndPoint);
                         }
                         else
                         {

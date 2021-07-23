@@ -66,12 +66,11 @@ namespace Siguri_Projekti2
             byte[] bytePlainMsg = Encoding.UTF8.GetBytes(request);
             MemoryStream ms = new MemoryStream();
             CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write);
-            cs.FlushFinalBlock();
             cs.Write(bytePlainMsg, 0, bytePlainMsg.Length);
             cs.Close();
             byte[] byteCipherMsg = ms.ToArray();
             byte[] byteCipherDesKey = rsa.Encrypt(DesKey, true);
-            //byte[] fullMessage = initialVector.Concat(byteCipherDesKey).Concat(byteCipherMsg).ToArray();
+            byte[] fullMessage = initialVector.Concat(byteCipherDesKey).Concat(byteCipherMsg).ToArray();
             string sendData = Convert.ToBase64String(initialVector.Concat(byteCipherDesKey).Concat(byteCipherMsg).ToArray());
 
             udpClient.Send(Convert.FromBase64String(sendData), Convert.FromBase64String(sendData).Length);

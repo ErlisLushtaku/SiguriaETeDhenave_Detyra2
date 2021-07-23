@@ -40,6 +40,10 @@ namespace DataSecurity_pr2
                 {
                     MessageBox.Show("You should sign up first!", "Alert");
                 }
+                else if(response == "invalidCredentials")
+                {
+                    MessageBox.Show("Invalid credentials", "Alert");
+                }
                 else
                 {
                     string payload = ClientSide.getJwtPayload(response);
