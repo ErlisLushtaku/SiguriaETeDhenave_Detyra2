@@ -32,11 +32,46 @@ namespace Siguri_Projekti2
             this.Close();
             
         }
+        public static bool is_Numeric(string s)
+        {
+            if (Int32.TryParse(s, out int value))
+            {
+                return true;
+
+            }
+            return false;
+        }
+        public static bool is_Valid_Email(String email)
+        {
+            String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+            //Compile regular expression to get the pattern
+            Regex pattern = new Regex(regex);
+            if (pattern.IsMatch(email))
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool is_Valid_Password(String password)
+        {
+
+            if (password.Length < 8)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
             // validimet
-            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && textBox5.Text != "")
+            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && textBox5.Text != ""
+               && is_Valid_Email(textBox3.Text) && is_Numeric(textBox4.Text) && is_Valid_Password(textBox5.Text)
+               )
             {
                 string salt = new Random().Next(100000, 1000000).ToString();
                 string password = ClientSide.computeHash(textBox5.Text+salt);

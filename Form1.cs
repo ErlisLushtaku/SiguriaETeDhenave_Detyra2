@@ -26,11 +26,35 @@ namespace DataSecurity_pr2
         {
             client = new ClientSide();
         }
+        public static bool is_Valid_Email(String email)
+        {
+            String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+            //Compile regular expression to get the pattern
+            Regex pattern = new Regex(regex);
+            if (pattern.IsMatch(email))
+            {
+                return true;
+            }
+            return false;
+        }
+        public static bool is_Valid_Password(String password)
+        {
+
+            if (password.Length < 8)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+        }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
             // validimet
-            if(textBox1.Text!="" && textBox2.Text!="")
+            if (textBox1.Text != "" && textBox2.Text != "" && is_Valid_Email(textBox1.Text) && is_Valid_Password(textBox2.Text))
             {
                 client.requestToServer("login*" + textBox1.Text + ">" + textBox2.Text);
                 string response = client.responseFromServer();
