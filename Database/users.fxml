@@ -23,4 +23,12 @@
     <password>MSMUFsolpKI3Fobkd6NQ9</password>
     <salt>163184</salt>
   </user>
+  <user>
+    <name>bl</name>
+    <surname>as</surname>
+    <email>donat@sinani</email>
+    <id>123</id>
+    <password>di2AouhpFP1Llezq2HL0/DoIJRA=</password>
+    <salt>811632</salt>
+  </user>
 </users>

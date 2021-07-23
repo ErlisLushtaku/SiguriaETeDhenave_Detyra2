@@ -6,4 +6,11 @@
     <value>800</value>
     <user>2</user>
   </bill>
+  <bill>
+    <type>1</type>
+    <year>2</year>
+    <month>3</month>
+    <value>4</value>
+    <user>5</user>
+  </bill>
 </bills>
