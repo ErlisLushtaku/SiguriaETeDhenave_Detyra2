@@ -115,7 +115,7 @@ namespace Siguri_Projekti2
             // validimet
             if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && textBox6.Text != "")
             {
-                if(is_Numeric(textBox2.Text) && is_Numeric(textBox3.Text) && is_Double(textBox4.Text) && is_Numeric(textBox6.Text))
+                if(is_Numeric(textBox2.Text) && is_Double(textBox4.Text) && is_Numeric(textBox6.Text))
                 {
                     Form1.client.requestToServer("registerbill*" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + textBox6.Text);
                     String response = Form1.client.responseFromServer();

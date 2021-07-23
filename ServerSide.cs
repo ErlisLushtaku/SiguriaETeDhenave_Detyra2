@@ -165,7 +165,7 @@ namespace Siguri_Projekti2
         public ServerSide()
         {
             rsa = (RSACryptoServiceProvider)certifikata.PrivateKey;
-            serverThread();
+            ServerMultiThread();
         }
         public static string computeHash(string saltedpassword)
         {

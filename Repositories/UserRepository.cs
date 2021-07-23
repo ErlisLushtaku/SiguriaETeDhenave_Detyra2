@@ -48,26 +48,6 @@ namespace DataSecurity_pr2.Repositories
             }
             return false;
         }
-        //private static int idExists(int id) {
-        //    XmlNodeList userList = objXml.GetElementsByTagName("id");
-        //    for (int i = 0; i < userList.Count; i++)
-        //    {
-        //        if (string.Equals(userList[i].InnerText, id.ToString())) {
-        //            return id;
-        //        }
-        //    }
-        //    return -1;
-        //}
-        //private static bool emailExists(string email)
-        //{
-        //    XmlNodeList userList = objXml.GetElementsByTagName("email");
-        //    for (int i = 0; i < userList.Count; i++)
-        //    {
-        //        if (string.Equals(userList[i].InnerText, email))
-        //            return true;
-        //    }
-        //    return false;
-        //} 
         public static User findUser(string email) {
             objXml.Load("../../Database/users.fxml");
             XmlNodeList userList = objXml.GetElementsByTagName("user");
@@ -81,19 +61,7 @@ namespace DataSecurity_pr2.Repositories
 
             return null;
         }
-        //public static User validatePw(string password)
-        //{
-        //    objXml.Load("../../Database/users.fxml");
-        //    XmlNodeList userList = objXml.GetElementsByTagName("user");
-        //    foreach (XmlNode user in userList)
-        //    {
-        //        if (string.Equals(user["password"].InnerText, password))
-        //        {
-        //            return new User(user["name"].InnerText, user["surname"].InnerText, user["email"].InnerText, int.Parse(user["id"].InnerText), user["password"].InnerText, user["salt"].InnerText);
-        //        }
-        //    }
-        //    return null;
-        //}
+    
         public static int countUsers()
         {
             var nodeCount = 0;

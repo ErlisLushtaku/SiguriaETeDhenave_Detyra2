@@ -1,34 +1,3 @@
 <users>
-  <user>
-    <name>Enes</name>
-    <surname>Hasani</surname>
-    <email>enes.hasani@student.uni-pr.edu</email>
-    <id>2</id>
-    <password>12345678</password>
-    <salt>12345678</salt>
-  </user>
-  <user>
-    <name>a</name>
-    <surname>b</surname>
-    <email>as</email>
-    <id>12</id>
-    <password>P9ODchpxjBUG0xq5jk2BiY</password>
-    <salt>963710</salt>
-  </user>
-  <user>
-    <name>Donat</name>
-    <surname>Sinani</surname>
-    <email>donat@sin</email>
-    <id>123</id>
-    <password>MSMUFsolpKI3Fobkd6NQ9</password>
-    <salt>163184</salt>
-  </user>
-  <user>
-    <name>bl</name>
-    <surname>as</surname>
-    <email>donat@sinani</email>
-    <id>123</id>
-    <password>di2AouhpFP1Llezq2HL0/DoIJRA=</password>
-    <salt>811632</salt>
-  </user>
+ 
 </users>

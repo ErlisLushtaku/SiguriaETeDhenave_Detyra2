@@ -22,25 +22,26 @@ namespace DataSecurity_pr2.Repositories
             XmlElement yearNode = objXml.CreateElement("year");
             XmlElement monthNode = objXml.CreateElement("month");
             XmlElement valueNode = objXml.CreateElement("value");
-            XmlElement userIdNode = objXml.CreateElement("user");
+            XmlElement numberOfArticlesNode = objXml.CreateElement("NumriIArtikujve");
 
 
             typeNode.InnerText = bill.getType();
             yearNode.InnerText = bill.getYear().ToString();
             monthNode.InnerText = bill.getMonth();
             valueNode.InnerText = bill.getValue().ToString();
-            userIdNode.InnerText = bill.getUserId().ToString();
+            numberOfArticlesNode.InnerText = bill.getUserId().ToString();
 
             billNode.AppendChild(typeNode);
             billNode.AppendChild(yearNode);
             billNode.AppendChild(monthNode);
             billNode.AppendChild(valueNode);
-            billNode.AppendChild(userIdNode);
+            billNode.AppendChild(numberOfArticlesNode);
             rootNode.AppendChild(billNode);
 
             objXml.Save("../../Database/bills.fxml");
         }
-        public static List<Bill> listUserBills(int userId){
+        public static List<Bill> listUserBills(int userId)
+        {
             List<Bill> userBills = new List<Bill>();
             objXml.Load("../../Database/bills.fxml");
             XmlNodeList billList = objXml.GetElementsByTagName("bill");
@@ -50,7 +51,7 @@ namespace DataSecurity_pr2.Repositories
                     userBills.Add(new Bill(bill["type"].InnerText, int.Parse(bill["year"].InnerText), bill["month"].InnerText, double.Parse(bill["value"].InnerText), int.Parse(bill["user"].InnerText)));
             }
             return userBills;
-            }
+        }
         private static void createBillDbIfItDoesntExists()
         {
             if (!File.Exists("../../Database/bills.fxml"))
