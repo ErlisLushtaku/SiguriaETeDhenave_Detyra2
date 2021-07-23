@@ -51,7 +51,7 @@ namespace Siguri_Projekti2
             byte[] enMessage = new byte[fullMsgData.Length - IV.Length - enDesKey.Length];
             Array.Copy(fullMsgData, IV, 8);
             Array.Copy(fullMsgData, IV.Length, enDesKey, 0, 256);
-            Array.Copy(fullMsgData, IV.Length + enDesKey.Length, enMessage, 0, fullMsgData.Length - IV.Length - enDesKey.Length);
+            Array.Copy(fullMsgData, IV.Length + enDesKey.Length, enMessage, 0, enMessage.Length);
             desKey = rsa.Decrypt(enDesKey, true);
             DES des = DES.Create();
             des.IV = IV;
@@ -74,7 +74,7 @@ namespace Siguri_Projekti2
             string plainData = Decrypt(fullMsgData);
             string logOrRegOrBill = plainData.Split('*')[0];
             string command = plainData.Split('*')[1];
-
+            command = Regex.Replace(command, @"[\0]+", "");
             //komanda per login=emaili,pw
             //per register=emri,mbi,imella,id,pw
             //per fatura=id,viti,muji,...,...
@@ -83,7 +83,7 @@ namespace Siguri_Projekti2
             {
                 case "login":
                     string emaili = command.Split('>')[0];
-                    string passwordi = command.Split('>')[1];
+                    string passwordi = command.Substring(emaili.Length+1);
                     User usr = UserRepository.findUser(emaili);
                     if (usr == null)
                     {
@@ -92,7 +92,7 @@ namespace Siguri_Projekti2
                     }
                     else
                     {
-                        if (usr.getPassword() != passwordi)
+                        if (usr.getPassword() != computeHash(usr.getSalt()+passwordi))
                         {
                             user.Send(Convert.FromBase64String(Encrypt("ERROR")), Convert.FromBase64String(Encrypt("ERROR")).Length, RemoteIpEndPoint);
                         }
@@ -120,7 +120,7 @@ namespace Siguri_Projekti2
                         }
                         else
                         {
-                            byte[] a = new byte[2];
+                          
                             user.Send(Convert.FromBase64String(Encrypt("ERROR")), Convert.FromBase64String(Encrypt("ERROR")).Length, RemoteIpEndPoint);
                         }
                     }
