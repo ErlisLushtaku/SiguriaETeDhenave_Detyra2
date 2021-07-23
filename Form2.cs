@@ -39,7 +39,7 @@ namespace Siguri_Projekti2
             if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && textBox5.Text != "")
             {
                 string salt = new Random().Next(100000, 1000000).ToString();
-                string password = ClientSide.computeHash(salt+textBox5.Text);
+                string password = ClientSide.computeHash(textBox5.Text+salt);
 
                 Form1.client.requestToServer("register*" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + salt + ">" + password);
                 String response = Form1.client.responseFromServer();
