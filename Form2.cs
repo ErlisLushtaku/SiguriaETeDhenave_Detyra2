@@ -41,6 +41,7 @@ namespace Siguri_Projekti2
             }
             return false;
         }
+
         public static bool is_Valid_Email(String email)
         {
             String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
@@ -59,40 +60,59 @@ namespace Siguri_Projekti2
             {
                 return false;
             }
-            else
+
+            int charCount = 0;
+            int numCount = 0;
+            for (int i = 0; i < password.Length; i++)
             {
-                return true;
+                char ch = password[i];
+
+                if (Char.IsDigit(ch)) numCount++;
+                else if (Char.IsLetter(ch)) charCount++;
+                else return false;
             }
+
+            return (charCount >= 1 && numCount >= 1);
 
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             // validimet
-            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && textBox5.Text != ""
-               && is_Valid_Email(textBox3.Text) && is_Numeric(textBox4.Text) && is_Valid_Password(textBox5.Text)
-               )
+            if (textBox1.Text != "" && textBox2.Text != "" && textBox3.Text != "" && textBox4.Text != "" && textBox5.Text != "")
             {
-                string salt = new Random().Next(100000, 1000000).ToString();
-                string password = ClientSide.computeHash(textBox5.Text+salt);
-
-                Form1.client.requestToServer("register*" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + salt + ">" + password);
-                String response = Form1.client.responseFromServer();
-                response = Regex.Replace(response, @"[\0]+", "");
-
-                if (response == "ERROR")
+                if (is_Valid_Email(textBox3.Text) && is_Numeric(textBox4.Text) && is_Valid_Password(textBox5.Text))
                 {
-                    MessageBox.Show("This email address belongs to an existing user", "Error");
+                    string salt = new Random().Next(100000, 1000000).ToString();
+                    string password = ClientSide.computeHash(textBox5.Text+salt);
+
+                    Form1.client.requestToServer("register*" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + salt + ">" + password);
+                    String response = Form1.client.responseFromServer();
+                    response = Regex.Replace(response, @"[\0]+", "");
+
+                    if (response == "ERROR")
+                    {
+                        MessageBox.Show("This email address belongs to an existing user", "Error");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Register succsessful", "Alert");
+
+                        this.Hide();
+                        Form3 form = new Form3(ClientSide.getJwtPayload(response));
+                        form.ShowDialog();
+                        this.Close();
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Register succsessful", "Alert");
-
-                    this.Hide();
-                    Form3 form = new Form3(ClientSide.getJwtPayload(response));
-                    form.ShowDialog();
-                    this.Close();
+                    MessageBox.Show("ID must be a number, email must be valid adn password must contain at least 8 characters(including one number and one letter)", "Error");
                 }
+                
+            }
+            else
+            {
+                MessageBox.Show("Please fill out the fields", "Error");
             }
         }
     }

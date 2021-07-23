@@ -155,11 +155,11 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(61, 298);
+            this.label6.Location = new System.Drawing.Point(52, 301);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(97, 20);
+            this.label6.Size = new System.Drawing.Size(121, 20);
             this.label6.TabIndex = 15;
-            this.label6.Text = "Lloji i fatures:";
+            this.label6.Text = "Numri i artikujve:";
             // 
             // textBox6
             // 
