@@ -47,7 +47,7 @@ namespace Siguri_Projekti2
 
                 if (response == "ERROR")
                 {
-                    MessageBox.Show("Error registering", "Error");
+                    MessageBox.Show("This email address belongs to an existing user", "Error");
                 }
                 else
                 {
