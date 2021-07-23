@@ -13,6 +13,7 @@ using JWT.Serializers;
 using System.Security.Cryptography.X509Certificates;
 using DataSecurity_pr2;
 using DataSecurity_pr2.Models;
+using System.Text.RegularExpressions;
 
 namespace Siguri_Projekti2
 {
@@ -50,7 +51,7 @@ namespace Siguri_Projekti2
             {
                 Form1.client.requestToServer("registerbill*" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + textBox6.Text);
                 String response = Form1.client.responseFromServer();
-
+                response = Regex.Replace(response, @"[\0]+", "");
                 if (response == "OK")
                 {
                     MessageBox.Show("Bill registered", "Alert");

@@ -79,25 +79,8 @@ namespace Siguri_Projekti2
             //user.Close();
         }
 
-        //public string Encrypt(string response)
-        //{
-        //    byte[] byteResponse = Encoding.UTF8.GetBytes(response);
-        //    des = new DESCryptoServiceProvider();
-        //    //  des.Key = DesKey;
-        //    des.GenerateKey();
-        //    des.Mode = CipherMode.CBC;
-        //    des.Padding = PaddingMode.Zeros;
-        //    des.GenerateIV(); //gjenerimi i IV`
-        //    byte[] IV = des.IV;
-        //    MemoryStream ms = new MemoryStream();
-        //    CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(), CryptoStreamMode.Write);
-        //    cs.Write(byteResponse, 0, byteResponse.Length);
-        //    cs.Close();
-        //    byte[] encryptedResponse = ms.ToArray();
-        //    byte[] concatenatedResponse = IV.Concat(encryptedResponse).ToArray();
-        //    return Convert.ToBase64String(concatenatedResponse);
+        
 
-        //}
         public string responseFromServer()
         {
 
@@ -151,44 +134,6 @@ namespace Siguri_Projekti2
             byte[] saltedHashPassword = obj.ComputeHash(byteSaltedPassword);
             return Convert.ToBase64String(saltedHashPassword);
         }
-
-        //public static string JWTSignature(string email)
-        //{
-        //    User useri = UserRepository.findUser(email);
-
-        //    IJwtAlgorithm alg = new RS256Algorithm(certifikata);
-        //    IJsonSerializer serializer = new JsonNetSerializer();
-        //    IBase64UrlEncoder base64 = new JwtBase64UrlEncoder();
-        //    //IJwtValidator jwt = new JwtValidator(serializer,new UtcDateTimeProvider());
-        //    IJwtEncoder ije = new JwtEncoder(alg, serializer, base64);
-        //    var payload = new Dictionary<string, object>
-        //    {
-        //        {"Userid",useri.getId()},
-        //        {"Name",useri.getName()},
-        //        {"Surname",useri.getSurname()},
-        //        {"Email",useri.getEmail()},
-        //        {"Password",useri.getPassword()},
-        //        {"Salt",useri.getSalt()}
-        //    };
-
-        //    var token = ije.Encode(payload, secret);
-        //    string signedMessage = token;
-
-        //    return signedMessage;
-        //}
-        //public void listen()
-        //{
-        //    server.Listen(10);
-
-        //    while (true)
-        //    {
-
-        //        Socket client = server.Accept();
-        //        Thread thread = new Thread(() => this.sendResponseToUser(client));
-        //        thread.Start();
-
-
-        //    }
-        //}
     }
 }
+

@@ -32,16 +32,16 @@ namespace DataSecurity_pr2
             //else if(args[0]=="c")
             //{
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new Form1());
             //}
             //else if(args[0]=="s")
             //{
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run();
-            //ServerSide server = new ServerSide();
+             ServerSide server = new ServerSide();
             //string qkemi = "qkemi";
             //byte[] bytes = Encoding.UTF8.GetBytes(qkemi);
             //string bitString = Encoding.UTF8.GetString(bytes);

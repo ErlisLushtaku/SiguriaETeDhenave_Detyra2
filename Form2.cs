@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DataSecurity_pr2;
@@ -40,8 +41,9 @@ namespace Siguri_Projekti2
                 string salt = new Random().Next(100000, 1000000).ToString();
                 string password = ClientSide.computeHash(textBox5.Text + salt);
 
-                Form1.client.requestToServer("register*" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + password + ">" + salt);
+                Form1.client.requestToServer("register*" + textBox1.Text + ">" + textBox2.Text + ">" + textBox3.Text + ">" + textBox4.Text + ">" + salt + ">" + password);
                 String response = Form1.client.responseFromServer();
+                response = Regex.Replace(response, @"[\0]+", "");
 
                 if (response == "ERROR")
                 {
