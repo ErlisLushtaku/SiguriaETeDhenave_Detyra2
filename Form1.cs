@@ -58,13 +58,13 @@ namespace DataSecurity_pr2
             {
                 client.requestToServer("login*" + textBox1.Text + ">" + textBox2.Text);
                 string response = client.responseFromServer();
-                
-                response = Regex.Replace(response, @"[\0]+","");
-                if(response == "ERROR")
+
+                response = Regex.Replace(response, @"[\0]+", "");
+                if (response == "ERROR")
                 {
                     MessageBox.Show("You should sign up first!", "Alert");
                 }
-                else if(response == "invalidCredentials")
+                else if (response == "invalidCredentials")
                 {
                     MessageBox.Show("Invalid credentials", "Alert");
                 }
@@ -72,7 +72,7 @@ namespace DataSecurity_pr2
                 {
                     string payload = ClientSide.getJwtPayload(response);
 
-                    if(payload == "invalidSignature")
+                    if (payload == "invalidSignature")
                     {
                         MessageBox.Show("Invalid Signature", "Error");
                     }
@@ -84,7 +84,8 @@ namespace DataSecurity_pr2
                         string keyValSlt = payload.Split(',')[5];
                         string salt = keyValSlt.Split(':')[1];
                         salt = salt.Substring(1, salt.Length - 3);
-                        if (ClientSide.computeHash(textBox2.Text+ salt) == password) { 
+                        if (ClientSide.computeHash(textBox2.Text + salt) == password)
+                        {
                             this.Hide();
                             Form3 form = new Form3(payload);
                             form.ShowDialog();
@@ -93,9 +94,12 @@ namespace DataSecurity_pr2
                         else
                         {
                             MessageBox.Show("Invalid Credentials", "Error");
-                        }                        
+                        }
                     }
                 }
+            }
+            else {
+                MessageBox.Show("Password or email is written wrong(password must have 8 characters and email must have @ contained)!", "Error");
             }
         }
 
